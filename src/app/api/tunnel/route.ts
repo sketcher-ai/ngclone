@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       success: true,
       tunnelUrl: `${req.headers.get('host')}/api/tunnel/${tunnelId}`,
     });
-  } catch (error) {
+  } catch (err) {
     return NextResponse.json(
       { error: 'Failed to create tunnel' },
       { status: 500 }
@@ -53,7 +53,7 @@ export async function GET(
 
   // Forward the request
   return new Promise((resolve, reject) => {
-    proxy(req, res, (result: any) => {
+    proxy(req, res, (result: unknown) => {
       if (result instanceof Error) {
         reject(result);
       }
