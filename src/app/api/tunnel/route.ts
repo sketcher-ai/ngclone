@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { IncomingMessage, ServerResponse } from 'http';
+import { Socket } from 'net';
 
 // This will store active tunnels
 const tunnels = new Map<string, string>();
@@ -53,7 +55,10 @@ export async function GET(
 
   // Forward the request
   return new Promise((resolve, reject) => {
-    proxy(req, res, (result: unknown) => {
+    const nodeReq = Object.assign(new IncomingMessage(new Socket()), req);
+    const nodeRes = new ServerResponse(nodeReq);
+    
+    proxy(nodeReq, nodeRes, (result: unknown) => {
       if (result instanceof Error) {
         reject(result);
       }

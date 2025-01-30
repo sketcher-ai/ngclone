@@ -35,7 +35,7 @@ export default function Home() {
 
       setTunnelUrl(data.tunnelUrl);
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
       setLoading(false);
     }
